@@ -1,7 +1,9 @@
 package com.zhiyixi.model.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -16,7 +18,7 @@ public class ChartDO implements Serializable {
     /**
      * id
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
@@ -57,7 +59,6 @@ public class ChartDO implements Serializable {
     /**
      * 是否删除
      */
-    @TableLogic
     private Integer is_delete;
 
     @TableField(exist = false)
