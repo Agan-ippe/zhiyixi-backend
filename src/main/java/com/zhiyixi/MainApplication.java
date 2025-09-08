@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 //@MapperScan("com.yupi.springbootinit.mapper")
 @EnableScheduling
 @SpringBootApplication
-//@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
+@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 public class MainApplication {
 
     public static void main(String[] args) {

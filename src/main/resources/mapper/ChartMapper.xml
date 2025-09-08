@@ -7,13 +7,13 @@
     <resultMap id="BaseResultMap" type="com.zhiyixi.model.entity.ChartDO">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="goal" column="goal" jdbcType="VARCHAR"/>
-            <result property="chart_data" column="chart_data" jdbcType="VARCHAR"/>
-            <result property="chart_type" column="chart_type" jdbcType="VARCHAR"/>
-            <result property="gen_chart_info" column="gen_chart_info" jdbcType="VARCHAR"/>
-            <result property="gen_chart_result" column="gen_chart_result" jdbcType="VARCHAR"/>
-            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="is_delete" column="is_delete" jdbcType="TINYINT"/>
+            <result property="chartData" column="chart_data" jdbcType="VARCHAR"/>
+            <result property="chartType" column="chart_type" jdbcType="VARCHAR"/>
+            <result property="genChartInfo" column="gen_chart_info" jdbcType="VARCHAR"/>
+            <result property="genChartResult" column="gen_chart_result" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

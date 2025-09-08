@@ -22,43 +22,43 @@ public class UserDO implements Serializable {
     /**
      * 账号
      */
-    private String user_account;
+    private String userAccount;
 
     /**
      * 密码
      */
-    private String user_password;
+    private String userPassword;
 
     /**
      * 用户昵称
      */
-    private String user_name;
+    private String userName;
 
     /**
      * 用户头像
      */
-    private String user_avatar;
+    private String userAvatar;
 
     /**
      * 用户角色：user/admin
      */
-    private String user_role;
+    private String userRole;
 
     /**
      * 创建时间
      */
-    private Date create_time;
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private Date update_time;
+    private Date updateTime;
 
     /**
      * 是否删除
      */
     @TableLogic
-    private Integer is_delete;
+    private Integer isDelete;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
