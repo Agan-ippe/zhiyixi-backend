@@ -53,6 +53,7 @@ server:
 mybatis-plus:
   configuration:
     #    指定日志实现类为 StdOutImpl，即标准输出实现
+#    map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
@@ -92,10 +93,13 @@ mybatis-plus:
 knife4j:
   enable: true
   openapi:
-    title: "接口文档"
+    title: "智易析-智能BI平台接口文档"
     version: 1.0
+    description: "智易析-智能BI平台接口文档"
+    concat: "<a href='https://github.com/Agan-ippe'>知莫</a>    wjy7136@163.com"
     group:
       default:
+        group-name: 默认分组
         api-rule: package
         api-rule-resources:
-          - com.yupi.springbootinit.controller
+          - com.zhiyixi.controller
