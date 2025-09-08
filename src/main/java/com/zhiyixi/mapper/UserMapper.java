@@ -1,7 +1,7 @@
 package com.zhiyixi.mapper;
 
-import com.zhiyixi.model.entity.UserDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zhiyixi.model.entity.UserDO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

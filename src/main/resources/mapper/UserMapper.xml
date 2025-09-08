@@ -6,14 +6,14 @@
 
     <resultMap id="BaseResultMap" type="com.zhiyixi.model.entity.UserDO">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="user_account" column="user_account" jdbcType="VARCHAR"/>
-            <result property="user_password" column="user_password" jdbcType="VARCHAR"/>
-            <result property="user_name" column="user_name" jdbcType="VARCHAR"/>
-            <result property="user_avatar" column="user_avatar" jdbcType="VARCHAR"/>
-            <result property="user_role" column="user_role" jdbcType="VARCHAR"/>
-            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="is_delete" column="is_delete" jdbcType="TINYINT"/>
+            <result property="userAccount" column="user_account" jdbcType="VARCHAR"/>
+            <result property="userPassword" column="user_password" jdbcType="VARCHAR"/>
+            <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+            <result property="userAvatar" column="user_avatar" jdbcType="VARCHAR"/>
+            <result property="userRole" column="user_role" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
