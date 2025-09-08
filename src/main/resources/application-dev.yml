@@ -1,0 +1,26 @@
+# 开发环境配置文件
+server:
+  port: 8101
+spring:
+  # 数据库配置
+  # todo 需替换配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/zhibi?serverTimezone=UTC
+    username: root
+    password: 123456
+
+  # Redis 配置
+  # todo 需替换配置
+  redis:
+    database: 1
+    host: 192.168.153.128
+    port: 6379
+    timeout: 5000
+    password: aip036
+  # Elasticsearch 配置
+  # todo 需替换配置
+#  elasticsearch:
+#    uris: http://localhost:9200
+#    username: root
+#    password: 123456
