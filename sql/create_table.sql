@@ -20,7 +20,7 @@ create table if not exists user
     user_role     varchar(256) default 'user'            not null comment '用户角色：user/admin',
     create_time   datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
     update_time   datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    is_delete     tinyint      default 0                 not null comment '是否删除',
+    is_delete tinyint default 0 not null comment '是否删除，0-否，1-是',
     index idx_userAccount (user_account)
     ) comment '用户表' collate = utf8mb4_unicode_ci;
 
@@ -28,6 +28,8 @@ create table if not exists user
 create table if not exists chart
 (
     id           bigint auto_increment comment 'id' primary key,
+    user_id    bigint            null comment '创建用户ID',
+    chart_name varchar(128)      null comment '图表名称',
     goal  		 text			null comment '分析目标',
     chart_data   text			null comment '图表数据',
     chart_type 	 varchar(128)	null comment '图表类型',
@@ -35,5 +37,5 @@ create table if not exists chart
     gen_chart_result	text	null comment 'AI生成的分析结论',
     create_time   datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
     update_time   datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    is_delete     tinyint      default 0                 not null comment '是否删除'
+    is_delete  tinyint default 0 not null comment '是否删除，0-否，1-是'
     ) comment '数据分析表' collate = utf8mb4_unicode_ci;
