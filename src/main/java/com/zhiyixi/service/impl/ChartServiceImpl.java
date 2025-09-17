@@ -1,9 +1,9 @@
 package com.zhiyixi.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zhiyixi.mapper.ChartMapper;
 import com.zhiyixi.model.entity.ChartDO;
 import com.zhiyixi.service.ChartService;
-import com.zhiyixi.mapper.ChartMapper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChartServiceImpl extends ServiceImpl<ChartMapper, ChartDO>
     implements ChartService{
+
 
 }
 

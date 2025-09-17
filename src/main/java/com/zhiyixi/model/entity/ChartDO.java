@@ -20,6 +20,16 @@ public class ChartDO implements Serializable {
     private Long id;
 
     /**
+     * 创建用户ID
+     */
+    private Long userId;
+
+    /**
+     * 图表名称
+     */
+    private String chartName;
+
+    /**
      * 分析目标
      */
     private String goal;

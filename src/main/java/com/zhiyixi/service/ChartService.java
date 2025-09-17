@@ -9,5 +9,4 @@ import com.zhiyixi.model.entity.ChartDO;
 * @createDate 2025-09-08 13:00:57
 */
 public interface ChartService extends IService<ChartDO> {
-
 }
