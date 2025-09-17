@@ -37,8 +37,9 @@ import static com.zhiyixi.service.impl.UserServiceImpl.SALT;
 
 @Slf4j
 @RestController
-@Api(value = "用户相关接口", tags = "用户相关接口")
+@Api(tags = "用户相关接口")
 @RequestMapping("/user")
+@CrossOrigin(origins = {"http://localhost:8000"}, allowCredentials = "true") //解决Cookie跨域问题
 public class UserController {
 
     @Resource
@@ -86,6 +87,7 @@ public class UserController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         LoginUserVO loginUserVO = userService.userLogin(userAccount, userPassword, request);
+        log.info("登录成功，用户账号为{}", userAccount);
         return ResultUtils.success(loginUserVO);
     }
 
@@ -102,6 +104,7 @@ public class UserController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         boolean result = userService.userLogout(request);
+        log.info("用户注销，result:{}", result);
         return ResultUtils.success(result);
     }
 
@@ -115,6 +118,7 @@ public class UserController {
     @ApiOperation(value = "获取当前登录用户")
     public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {
         UserDO user = userService.getLoginUser(request);
+        log.info("获取当前登录用户, user:{}", user);
         return ResultUtils.success(userService.getLoginUserVO(user));
     }
 
