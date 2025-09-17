@@ -97,9 +97,10 @@ knife4j:
     version: 1.0
     description: "智易析-智能BI平台接口文档"
     concat: "<a href='https://github.com/Agan-ippe'>知莫</a>    wjy7136@163.com"
+#    email: "wjy7136@163.com"
     group:
       default:
-        group-name: 默认分组
+        group-name: "默认分组"
         api-rule: package
         api-rule-resources:
           - com.zhiyixi.controller
