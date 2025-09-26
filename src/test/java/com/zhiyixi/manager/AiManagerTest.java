@@ -19,11 +19,12 @@ class AiManagerTest {
     @Resource
     private AiManager aiManager;
 
-    @
+
 
     /**
      * 测试 AI 功能
      */
+    @Test
     void domain() {
         String answer = aiManager.sendMsgToXingHuo(true, "分析需求：\n" +
                 "分析网站用户的增长情况\n" +
