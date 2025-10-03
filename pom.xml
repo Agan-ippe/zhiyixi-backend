@@ -9,11 +9,10 @@
         <version>2.7.18</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-<!--    todo 更改组名-->
     <groupId>com.aip</groupId>
-    <artifactId>zhiyixi</artifactId>
+    <artifactId>zhiyixi-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>zhiyixi</name>
+    <name>zhiyixi-backend</name>
     <properties>
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
