@@ -29,6 +29,21 @@
       "name": "wx.open.appSecret",
       "type": "java.lang.String",
       "description": "Description for wx.open.appSecret."
+    },
+    {
+      "name": "xing-huo.client.appId",
+      "type": "java.lang.String",
+      "description": "Description for xing-huo.client.appId."
+    },
+    {
+      "name": "xing-huo.client.apiKey",
+      "type": "java.lang.String",
+      "description": "Description for xing-huo.client.apiKey."
+    },
+    {
+      "name": "xing-huo.client.apiSecret",
+      "type": "java.lang.String",
+      "description": "Description for xing-huo.client.apiSecret."
     }
   ]
 }
