@@ -217,23 +217,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO>
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
         }
         Long id = userQueryRequest.getId();
-//        String unionId = userQueryRequest.getUnionId();
-//        String mpOpenId = userQueryRequest.getMpOpenId();
         String userName = userQueryRequest.getUserName();
         String userProfile = userQueryRequest.getUserProfile();
         String userRole = userQueryRequest.getUserRole();
-//        String sortField = userQueryRequest.getSortField();
-//        String sortOrder = userQueryRequest.getSortOrder();
         QueryWrapper<UserDO> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(id != null, "id", id);
-//        queryWrapper.eq(StringUtils.isNotBlank(unionId), "unionId", unionId);
-//        queryWrapper.eq(StringUtils.isNotBlank(mpOpenId), "mpOpenId", mpOpenId);
         queryWrapper.eq(StringUtils.isNotBlank(userRole), "user_role", userRole);
         queryWrapper.like(StringUtils.isNotBlank(userProfile), "user_profile", userProfile);
         queryWrapper.like(StringUtils.isNotBlank(userName), "user_name", userName);
-//        queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
-//                sortField);
         return queryWrapper;
+    }
+
+    @Override
+    public boolean updateUserSurplus(HttpServletRequest request) {
+        log.info("UserService.updateUserSurplus: 检查用户剩余可用次数");
+        UserDO user = getLoginUser(request);
+        Integer surplus = user.getSurplus();
+        if (surplus == null || surplus <= 0) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"剩余可用次数不足，请联系管理员");
+        }
+        user.setSurplus(surplus - 1);
+        log.info("UserService.updateUserSurplus: 更新用户剩余可用次数");
+        boolean result = this.updateById(user);
+        if (!result) {
+            log.error("UserService.updateUserSurplus: 更新失败");
+            throw new BusinessException(ErrorCode.DATABASE_ERROR,"更新失败");
+        }
+        return true;
     }
 
 }

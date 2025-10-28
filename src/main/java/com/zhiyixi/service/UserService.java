@@ -107,4 +107,12 @@ public interface UserService extends IService<UserDO> {
      */
     QueryWrapper<UserDO> getQueryWrapper(UserQueryRequest userQueryRequest);
 
+
+    /**
+     * 更新用户可用余额
+     * @param request
+     * @return
+     */
+    boolean updateUserSurplus(HttpServletRequest request);
+
 }

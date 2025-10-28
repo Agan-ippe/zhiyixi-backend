@@ -11,6 +11,7 @@
             <result property="userName" column="user_name" jdbcType="VARCHAR"/>
             <result property="userAvatar" column="user_avatar" jdbcType="VARCHAR"/>
             <result property="userRole" column="user_role" jdbcType="VARCHAR"/>
+            <result property="surplus" column="surplus" jdbcType="INTEGER"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
@@ -19,6 +20,7 @@
     <sql id="Base_Column_List">
         id,user_account,user_password,
         user_name,user_avatar,user_role,
-        create_time,update_time,is_delete
+        surplus,create_time,update_time,
+        is_delete
     </sql>
 </mapper>

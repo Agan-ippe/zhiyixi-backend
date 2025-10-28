@@ -45,6 +45,11 @@ public class UserDO implements Serializable {
     private String userRole;
 
     /**
+     * 剩余使用次数
+     */
+    private Integer surplus;
+
+    /**
      * 创建时间
      */
     private Date createTime;

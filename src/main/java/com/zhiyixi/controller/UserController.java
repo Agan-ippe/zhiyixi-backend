@@ -37,7 +37,6 @@ import static com.zhiyixi.service.impl.UserServiceImpl.SALT;
 
 @Slf4j
 @RestController
-@Api(tags = "用户相关接口")
 @RequestMapping("/user")
 @CrossOrigin(origins = {"http://localhost:8000"}, allowCredentials = "true") //解决Cookie跨域问题
 public class UserController {
