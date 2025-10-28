@@ -1,13 +1,13 @@
 package com.zhiyixi.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import cn.hutool.core.io.FileUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zhiyixi.annotation.AuthCheck;
 import com.zhiyixi.common.BaseResponse;
 import com.zhiyixi.common.DeleteRequest;
 import com.zhiyixi.common.ErrorCode;
 import com.zhiyixi.common.ResultUtils;
-import com.zhiyixi.constant.CommonConstant;
+import com.zhiyixi.constant.FileConstant;
 import com.zhiyixi.constant.UserConstant;
 import com.zhiyixi.exception.BusinessException;
 import com.zhiyixi.exception.ThrowUtils;
@@ -19,12 +19,8 @@ import com.zhiyixi.model.vo.chart.BiResponse;
 import com.zhiyixi.service.ChartService;
 import com.zhiyixi.service.UserService;
 import com.zhiyixi.utils.ExcelUtils;
-import com.zhiyixi.utils.SqlUtils;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +36,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @RestController
-@Api(tags = "数据分析接口")
 @RequestMapping("/chart")
 public class ChartController {
     @Resource
@@ -146,13 +141,14 @@ public class ChartController {
     }
 
     /**
-     * 分页获取列表（封装类）
+     * 分页获取列表（封装类）（管理员可用）
      *
      * @param chartQueryRequest
      * @param request
      * @return
      */
-    @PostMapping("/list/page/")
+    @Deprecated
+    @PostMapping("/list/page")
     @ApiOperation("分页获取图表列表")
     public BaseResponse<Page<ChartDO>> listChartByPage(@RequestBody ChartQueryRequest chartQueryRequest,
                                                        HttpServletRequest request) {
@@ -161,7 +157,7 @@ public class ChartController {
         // 限制爬虫
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
         Page<ChartDO> pageResult = chartService.page(new Page<>(current, size),
-                getQueryWrapper(chartQueryRequest));
+                chartService.getQueryWrapper(chartQueryRequest));
         return ResultUtils.success(pageResult);
     }
 
@@ -172,7 +168,7 @@ public class ChartController {
      * @param request
      * @return
      */
-    @PostMapping("/my/list/page/")
+    @PostMapping("/my/list/page")
     @ApiOperation("分页获取当前用户创建的图表列表")
     public BaseResponse<Page<ChartDO>> listMyChartByPage(@RequestBody ChartQueryRequest chartQueryRequest,
                                                          HttpServletRequest request) {
@@ -186,7 +182,7 @@ public class ChartController {
         // 限制爬虫
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
         Page<ChartDO> pageResult = chartService.page(new Page<>(current, size),
-                getQueryWrapper(chartQueryRequest));
+                chartService.getQueryWrapper(chartQueryRequest));
         return ResultUtils.success(pageResult);
     }
 
@@ -223,33 +219,21 @@ public class ChartController {
     // endregion
 
     /**
-     * 获取查询包装类
+     * 因为文件解析多次使用，所以将改代码抽离
      *
-     * @param chartQueryRequest
-     * @return
+     * @param multipartFile 源文件
+     * @return 返回 csv 字符串
      */
-    private QueryWrapper<ChartDO> getQueryWrapper(ChartQueryRequest chartQueryRequest) {
-        QueryWrapper<ChartDO> queryWrapper = new QueryWrapper<>();
-        if (chartQueryRequest == null) {
-            return queryWrapper;
-        }
-        String sortField = chartQueryRequest.getSortField();
-        String sortOrder = chartQueryRequest.getSortOrder();
-        Long id = chartQueryRequest.getId();
-        String chartName = chartQueryRequest.getChartName();
-        Long userId = chartQueryRequest.getUserId();
-        String goal = chartQueryRequest.getGoal();
-        String chartType = chartQueryRequest.getChartType();
-        // 拼接查询条件
-        queryWrapper.eq(id != null && id > 0, "id", id);
-        queryWrapper.like(StringUtils.isNotBlank(chartName), "chart_name", chartName);
-        queryWrapper.eq(StringUtils.isNotBlank(goal), "goal", goal);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
-        queryWrapper.eq(StringUtils.isNotBlank(chartType), "chart_type", chartType);
-        queryWrapper.eq("is_deleted", 0);
-        queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
-                sortField);
-        return queryWrapper;
+    public String analysisFile(MultipartFile multipartFile){
+        ThrowUtils.throwIf(multipartFile == null, ErrorCode.PARAMS_ERROR, "文件为空");
+        // 文件大小
+        long size = multipartFile.getSize();
+        ThrowUtils.throwIf(size > FileConstant.MAX_FILE_SIZE, ErrorCode.SYSTEM_ERROR, "文件大小不能超过1MB");
+        // 文件后缀
+        String originalFilename = multipartFile.getOriginalFilename();
+        String fileSuffix = FileUtil.getSuffix(originalFilename);
+        ThrowUtils.throwIf(!FileConstant.RAW_DATA_SUFFIX_LIST.contains(fileSuffix), ErrorCode.PARAMS_ERROR, "文件格式不正确");
+        return ExcelUtils.excelToCsv(multipartFile, fileSuffix);
     }
 
     // endregion
@@ -267,64 +251,8 @@ public class ChartController {
     public BaseResponse<BiResponse> AIGenerateChart(@RequestPart("file") MultipartFile file,
                                                     AIGenerateChartRequest aiGenerateChartRequest,
                                                     HttpServletRequest request) {
-        String chartName = aiGenerateChartRequest.getChartName();
-        String goal = aiGenerateChartRequest.getGoal();
-        String chartType = aiGenerateChartRequest.getChartType();
-        // 仅提供登录用户使用
-        UserDO loginUser = userService.getLoginUser(request);
-        // 校验
-        ThrowUtils.throwIf(StringUtils.isBlank(goal), ErrorCode.PARAMS_ERROR, "目标为空");
-        ThrowUtils.throwIf(StringUtils.isNotBlank(chartName) && chartName.length() > 100,
-                ErrorCode.PARAMS_ERROR, "图表名称过长");
-        // 校验文件
-        // 校验文件大小
-        // 校验文件类型，仅支持 .xlsx
-
-        // 构造用户输入
-        // 输入示例
-        // 分析需求：
-        // xxx，
-        // 请使用xx图展示
-        // 原始数据：
-        // xxx
-        StringBuilder userInput = new StringBuilder();
-        userInput.append("分析需求:").append("\n");
-        String userGoal = goal;
-        // 拼接分析目标
-        if (StringUtils.isNotBlank(chartType)) {
-            userGoal += "，请使用" + chartType + "展示";
-        }
-        userInput.append(userGoal).append("\n");
-        userInput.append("原始数据：").append("\n");
-        // 读取拼接用户上传的文件
-        String csvDate = ExcelUtils.excelToCsv(file);
-        userInput.append(csvDate).append("\n");
-        // 调用AI接口
-        String aiGenerateResult = aiManager.sendMsgToXingHuo(true, userInput.toString());
-        String[] split = aiGenerateResult.split("'【【【'");
-        if (split.length < 3) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "AI生成失败");
-        }
-        String genChart = split[1].trim();
-        String genResult = split[2].trim();
-        // 提交到数据库
-        ChartDO chartDO = new ChartDO();
-        chartDO.setUserId(loginUser.getId());
-        chartDO.setChartName(chartName);
-        chartDO.setGoal(goal);
-        chartDO.setChartData(csvDate);
-        chartDO.setChartType(chartType);
-        chartDO.setGenChartInfo(genChart);
-        chartDO.setGenChartResult(genResult);
-        log.info("saving chart to database");
-        boolean saveResult = chartService.save(chartDO);
-        if (!saveResult) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "提交数据库失败");
-        }
-        BiResponse biResponse = new BiResponse();
-        biResponse.setGenChart(genChart);
-        biResponse.setGenResult(genResult);
-        biResponse.setChartId(chartDO.getId());
+        String csvData = analysisFile(file);
+        BiResponse biResponse = chartService.getChartByAi(csvData, aiGenerateChartRequest, request);
         return ResultUtils.success(biResponse);
     }
 }
