@@ -26,12 +26,24 @@ public class ExcelUtils {
      * @param multipartFile
      * @return
      */
-    public static String excelToCsv(MultipartFile multipartFile){
+    public static String excelToCsv(MultipartFile multipartFile, String fileSuffix){
         // 读取数据
         List<Map<Integer,String>> list = null;
+        // 判断文件格式
+        ExcelTypeEnum fileType = ExcelTypeEnum.CSV;
+        fileSuffix = "." + fileType;
+        ExcelTypeEnum[] values = ExcelTypeEnum.values();
+        // 排除 csv文件
+        for (ExcelTypeEnum item : values) {
+            if (item.getValue().equals(fileSuffix)) {
+                fileType = item;
+                break;
+            }
+        }
+        // 表格文件转 csv
         try {
             list = EasyExcel.read(multipartFile.getInputStream())
-                    .excelType(ExcelTypeEnum.XLSX)
+                    .excelType(fileType)
                     .sheet()
                     .headRowNumber(0)
                     .doReadSync();
@@ -39,7 +51,7 @@ public class ExcelUtils {
             log.error("读取excel文件失败",e);
         }
         if (CollUtil.isEmpty(list)) {
-            log.error("excel文件内容为空");
+            log.error("文件内容为空");
             return "";
         }
         // 转换为csv
