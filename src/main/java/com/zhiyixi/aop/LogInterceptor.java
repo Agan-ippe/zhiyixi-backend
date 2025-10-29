@@ -24,8 +24,10 @@ public class LogInterceptor {
 
     /**
      * 执行拦截
+     * 所有的 Controller下的接口的调用信息
+     * 以日志格式输出
      */
-    @Around("execution(* com.yupi.springbootinit.controller.*.*(..))")
+    @Around("execution(* com.zhiyixi.controller.*.*(..))")
     public Object doInterceptor(ProceedingJoinPoint point) throws Throwable {
         // 计时
         StopWatch stopWatch = new StopWatch();
