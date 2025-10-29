@@ -7,6 +7,7 @@ import com.zhiyixi.constant.CommonConstant;
 import com.zhiyixi.exception.BusinessException;
 import com.zhiyixi.exception.ThrowUtils;
 import com.zhiyixi.manager.AiManager;
+import com.zhiyixi.manager.RedisLimiterManager;
 import com.zhiyixi.mapper.ChartMapper;
 import com.zhiyixi.model.dto.chart.AIGenerateChartRequest;
 import com.zhiyixi.model.dto.chart.ChartQueryRequest;
@@ -39,6 +40,9 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, ChartDO>
 
     @Resource
     private AiManager aiManager;
+
+    @Resource
+    private RedisLimiterManager redisLimiterManager;
 
 
     @Override
@@ -80,6 +84,9 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, ChartDO>
         // 校验用户剩余使用次数
         boolean hasSurplus = userService.updateUserSurplus(request);
         ThrowUtils.throwIf(!hasSurplus, ErrorCode.OPERATION_ERROR, "剩余次数不足");
+        //  限流判断，每个用户一个限流器
+        redisLimiterManager.doRateLimiter("rate_limiter:getChartByAi:user" + loginUser.getId());
+
         // 构造用户输入，输入示例
         // 分析需求：
         // xxx，

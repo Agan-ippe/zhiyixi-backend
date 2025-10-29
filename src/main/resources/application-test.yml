@@ -18,6 +18,13 @@ spring:
     port: 6379
     timeout: 5000
     password: aip036
+
+#  redisson 配置
+  redisson:
+    host: 192.168.153.128
+    password: aip036
+    port: 6379
+    database: 1
   # Elasticsearch 配置
   # todo 需替换配置
 #  elasticsearch:
